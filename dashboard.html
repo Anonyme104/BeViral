@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeViral AI - Espace Client</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #FFFDF9; /* Fond Crème doux comme la Page 1 */
+      color: #2D2338;
+      min-height: 100vh;
+      padding-bottom: 85px;
+    }
+
+    .header-app {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #EFE6F7;
+      background: rgba(255, 253, 249, 0.95);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 10px rgba(138, 43, 226, 0.05);
+    }
+
+    .brand {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #8A2BE2; /* Violet pastel principal */
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #F3E8FF;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #E2C5FF;
+      font-size: 0.85rem;
+      color: #5B21B6;
+      font-weight: 600;
+    }
+
+    .user-pill img {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #FFF;
+    }
+
+    .main-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #EFE6F7;
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(138, 43, 226, 0.04);
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #3B0764;
+      margin-bottom: 6px;
+    }
+
+    p.subtitle {
+      color: #6B7280;
+      font-size: 0.88rem;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .badge-style {
+      display: inline-block;
+      background: #F3E8FF;
+      color: #7E22CE;
+      padding: 5px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      border: 1px solid #E9D5FF;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 14px 16px;
+      background: #FAFAFC;
+      border: 1.5px solid #E2D9F3;
+      border-radius: 14px;
+      color: #2D2338;
+      font-size: 0.95rem;
+      outline: none;
+      margin-bottom: 14px;
+      transition: border-color 0.2s ease;
+    }
+
+    .input-box:focus {
+      border-color: #8A2BE2;
+      background: #FFF;
+    }
+
+    textarea.input-box {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .btn-action {
+      width: 100%;
+      background: #8A2BE2;
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(138, 43, 226, 0.2);
+    }
+
+    .btn-action:hover {
+      background: #7B1FA2;
+    }
+
+    .btn-secondary {
+      background: #F3E8FF;
+      color: #7E22CE;
+      box-shadow: none;
+      border: 1px solid #E9D5FF;
+    }
+
+    .btn-secondary:hover {
+      background: #E9D5FF;
+    }
+
+    .btn-logout {
+      width: 100%;
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      border-radius: 14px;
+      padding: 12px;
+      color: #DC2626;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+      background: #FEE2E2;
+    }
+
+    /* ZONE DE RÉSULTAT IA */
+    .result-box {
+      display: none;
+      background: #FAF5FF;
+      border: 1px solid #E9D5FF;
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 20px;
+    }
+
+    .hook-item {
+      background: #FFFFFF;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #E9D5FF;
+      margin-bottom: 10px;
+      font-size: 0.88rem;
+      color: #4C1D95;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* BARRE DE NAVIGATION (STYLE GOOGLE PLAY EN BAS) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background: #FFFFFF;
+      border-top: 1px solid #EFE6F7;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #9CA3AF;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 25%;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .nav-item.active {
+      color: #8A2BE2;
+    }
+
+    .history-card {
+      background: #FAFAFC;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #EFE6F7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header class="header-app">
+    <div class="brand">BeViral AI</div>
+    <div class="user-pill">
+      <img id="navAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=User">
+      <span id="navHandle">@moncompte</span>
+    </div>
+  </header>
+
+  <div class="main-container">
+
+    <!-- ONGLET 1 : DÉPOSER MA VIDÉO -->
+    <div class="tab-content active" id="tab-deposer">
+      <div class="card">
+        <span class="badge-style" id="styleBadge">Style : Introverti (Contenu posé)</span>
+        <h2>📽️ Optimiser une vidéo</h2>
+        <p class="subtitle">Renseigne le thème de ta vidéo. L'IA génère les meilleurs crochets et la description adaptée à ton profil.</p>
+
+        <textarea id="videoInput" class="input-box" placeholder="Ex: 3 conseils simples pour mieux organiser ses journées quand on travaille de chez soi..."></textarea>
+        
+        <button class="btn-action" onclick="genererConseilsIA()">Générer l'Optimisation IA</button>
+
+        <div class="result-box" id="resultArea">
+          <h3 style="color:#6B21A8; margin-bottom:12px; font-size:0.95rem;">🎯 Crochets (Hooks) recommandés :</h3>
+          <div class="hook-item" id="hook1">1. ...</div>
+          <div class="hook-item" id="hook2">2. ...</div>
+          <div class="hook-item" id="hook3">3. ...</div>
+
+          <h3 style="color:#6B21A8; margin-top:16px; margin-bottom:8px; font-size:0.95rem;">📝 Description & Hashtags :</h3>
+          <p style="font-size: 0.88rem; color: #4B5563; line-height: 1.5; background:#FFF; padding:12px; border-radius:10px; border:1px solid #E9D5FF;" id="descOutput">
+            ...
+          </p>
+
+          <button class="btn-action btn-secondary" style="margin-top:15px;" onclick="sauvegarderHistorique()">💾 Sauvegarder dans l'Historique</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONGLET 2 : ANALYSER UN COMPTE -->
+    <div class="tab-content" id="tab-analyser">
+      <div class="card">
+        <h2>📊 Analyser un compte TikTok</h2>
+        <p class="subtitle">Analyse ton compte ou un autre compte pour détecter les opportunités d'optimisation.</p>
+
+        <input type="text" id="targetAccount" class="input-box" placeholder="@pseudo_tiktok" value="@moncompte">
+        <button class="btn-action" onclick="analyserCompteAction()">Lancer le Diagnostic</button>
+
+        <div id="auditResult" style="display:none; margin-top:20px;">
+          <div style="background:#F0FDF4; padding:16px; border-radius:14px; border:1px solid #BBF7D0;">
+            <div style="font-weight:bold; color:#166534; margin-bottom:6px;">✔ Diagnostic terminé pour <span id="auditTargetName"></span></div>
+            <p style="font-size:0.85rem; color:#15803D; line-height:1.4;">
+              • Potentiel d'engagement : Fort<br>
+              • Recommandation : Soigne les 3 premières secondes et privilégie des descriptions courtes avec mots-clés clairs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONGLET 3 : HISTORIQUE -->
+    <div class="tab-content" id="tab-historique">
+      <div class="card">
+        <h2>📜 Mon Historique</h2>
+        <p class="subtitle">Tes données et contenus sauvegardés sont conservés ici, même si tu te reconnectes plus tard.</p>
+
+        <div id="historyList">
+          <!-- Les éléments sauvegardés s'afficheront ici -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ONGLET 4 : MON PROFIL / VOUS -->
+    <div class="tab-content" id="tab-profil">
+      <div class="card" style="text-align:center;">
+        <img id="profileTabAvatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=User" style="width:75px; height:75px; border-radius:50%; border:3px solid #8A2BE2; margin-bottom:10px; background:#FFF;">
+        <h2 id="profileTabHandle">@moncompte</h2>
+        <p class="subtitle">Compte Actif - Accès Illimité</p>
+
+        <div style="text-align:left; background:#FAFAFC; padding:15px; border-radius:14px; margin-top:15px; border:1px solid #EFE6F7;">
+          <div style="font-size:0.78rem; color:#6B7280; margin-bottom:4px; font-weight:600;">PROFIL D'EXPRESSION</div>
+          <div style="font-weight:bold; color:#7E22CE;" id="styleDisplay">Introverti(e) (Contenu posé)</div>
+        </div>
+
+        <button class="btn-logout" onclick="deconnexion()">🚪 Se déconnecter</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BARRE DE NAVIGATION EN BAS -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('deposer', this)">
+      <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+      Déposer
+    </button>
+    <button class="nav-item" onclick="switchTab('analyser', this)">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14I7 12h2v5h3zm0-7h-2V7h2v3zm4 7h-2V7h2v10z"/></svg>
+      Analyser
+    </button>
+    <button class="nav-item" onclick="switchTab('historique', this)">
+      <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+      Historique
+    </button>
+    <button class="nav-item" onclick="switchTab('profil', this)">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      Vous
+    </button>
+  </nav>
+
+  <script>
+    // Récupération des données utilisateur
+    let savedUser = localStorage.getItem('beviral_username') || '@moncompte';
+    let savedStyle = localStorage.getItem('beviral_style') || 'introvert';
+    let lastGenerated = null;
+
+    // Mise à jour de l'affichage
+    document.getElementById('navHandle').innerText = savedUser;
+    document.getElementById('profileTabHandle').innerText = savedUser;
+    document.getElementById('targetAccount').value = savedUser;
+
+    const seed = savedUser.replace('@', '');
+    const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${seed}`;
+    document.getElementById('navAvatar').src = avatarUrl;
+    document.getElementById('profileTabAvatar').src = avatarUrl;
+
+    if(savedStyle === 'extravert') {
+      document.getElementById('styleBadge').innerText = "Style : Extraverti (Face caméra & Dynamique)";
+      document.getElementById('styleDisplay').innerText = "Extraverti(e) (Dynamique & Direct)";
+    } else if(savedStyle === 'mixte') {
+      document.getElementById('styleBadge').innerText = "Style : Polyvalent (Mixte)";
+      document.getElementById('styleDisplay').innerText = "Mixte (Format variable)";
+    }
+
+    // Navigation entre onglets
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      btn.classList.add('active');
+
+      if(tabId === 'historique') {
+        afficherHistorique();
+      }
+    }
+
+    // Génération dynamique basée sur le texte saisi et le style
+    function genererConseilsIA() {
+      const input = document.getElementById('videoInput').value.trim();
+      if(!input) {
+        alert("Merci de renseigner le thème ou l'idée de ta vidéo.");
+        return;
+      }
+
+      let h1, h2, h3, desc;
+
+      if(savedStyle === 'extravert') {
+        h1 = `1. "Arrête de tout faire de travers si tu veux réussir ton/ta ${input} !"`;
+        h2 = `2. "Voici LE secret choque que personne ne te dit sur ${input} !"`;
+        h3 = `3. "Regarde ça jusqu'au bout si tu veux cartonner sur ${input}."`;
+        desc = `Découvre tout de suite la méthode en vidéo ! 🔥\n#astuce #viral #content #${input.split(' ')[0]}`;
+      } else {
+        h1 = `1. "Voici une méthode simple et sans prise de tête concernant ${input}..."`;
+        h2 = `2. "Si tu cherches une façon calme et efficace d'aborder ${input}..."`;
+        h3 = `3. "Un détail discret mais essentiel à savoir sur ${input}."`;
+        desc = `Aperçu clair et accessible. L'essentiel est directement expliqué dans la vidéo.\n#conseil #explication #astuce #${input.split(' ')[0]}`;
+      }
+
+      document.getElementById('hook1').innerText = h1;
+      document.getElementById('hook2').innerText = h2;
+      document.getElementById('hook3').innerText = h3;
+      document.getElementById('descOutput').innerText = desc;
+
+      document.getElementById('resultArea').style.display = 'block';
+
+      lastGenerated = {
+        sujet: input,
+        h1: h1,
+        date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+      };
+    }
+
+    // Enregistrement dans LocalStorage (Conservation des données)
+    function sauvegarderHistorique() {
+      if(!lastGenerated) return;
+
+      let history = JSON.parse(localStorage.getItem('beviral_history') || '[]');
+      history.unshift(lastGenerated);
+      localStorage.setItem('beviral_history', JSON.stringify(history));
+
+      alert("Enregistré dans ton historique !");
+    }
+
+    function afficherHistorique() {
+      const list = document.getElementById('historyList');
+      let history = JSON.parse(localStorage.getItem('beviral_history') || '[]');
+
+      if(history.length === 0) {
+        list.innerHTML = `<p style="color:#9CA3AF; font-size:0.88rem; text-align:center; padding:20px;">Aucun élément enregistré pour le moment.</p>`;
+        return;
+      }
+
+      list.innerHTML = history.map(item => `
+        <div class="history-card">
+          <div style="font-size:0.75rem; color:#8A2BE2; font-weight:600;">${item.date}</div>
+          <div style="font-weight:bold; font-size:0.9rem; color:#3B0764; margin:4px 0;">Thème : ${item.sujet}</div>
+          <div style="font-size:0.82rem; color:#4B5563;">Hook : ${item.h1}</div>
+        </div>
+      `).join('');
+    }
+
+    function analyserCompteAction() {
+      const target = document.getElementById('targetAccount').value;
+      if(!target) return;
+      document.getElementById('auditTargetName').innerText = target;
+      document.getElementById('auditResult').style.display = 'block';
+    }
+
+    function deconnexion() {
+      if(confirm("Veux-tu te déconnecter ? Tes données sauvegardées resteront conservées à ta prochaine connexion.")) {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+</body>
+</html>

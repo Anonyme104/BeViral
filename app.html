@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeViral AI - Diagnostic du compte</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #0b0b0e;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: radial-gradient(circle at top, #1e102a 0%, #0b0b0e 80%);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      max-width: 500px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      position: fixed;
+      top: 20px;
+      z-index: 10;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 25%;
+      background: linear-gradient(90deg, #d8b4fe, #e879f9);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .step-card {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      display: none;
+      animation: fadeIn 0.4s ease-out;
+      margin-top: 40px;
+    }
+
+    .step-card.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #a0a0ab;
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+    .input-box:focus {
+      border-color: #d8b4fe;
+    }
+
+    .btn-action {
+      width: 100%;
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      border: none;
+      border-radius: 30px;
+      padding: 16px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 15px;
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-action:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .btn-choice {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px 20px;
+      color: white;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      transition: all 0.2s ease;
+      width: 100%;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .btn-choice:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: #d8b4fe;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .video-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+    }
+
+    .disclaimer-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 12px;
+      padding: 12px 15px;
+      font-size: 0.8rem;
+      color: #fcd34d;
+      margin-top: 15px;
+      text-align: left;
+      line-height: 1.4;
+    }
+
+    .link-feedback {
+      font-size: 0.8rem;
+      color: #34d399;
+      text-align: left;
+      margin-top: -8px;
+      margin-bottom: 15px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- ÉTAPE 1 : TikTok Username & Avatar -->
+  <div class="step-card active" id="step1">
+    <h2>Analyse de ton compte TikTok</h2>
+    <p class="subtitle">Entre ton pseudo exact pour récupérer les données de ton profil</p>
+
+    <input type="text" id="tiktokUsername" class="input-box" placeholder="@ton_pseudo" value="@Lolirock.french.fan" oninput="updateProfile()">
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin: 15px 0 25px 0;">
+      <img id="userAvatar" src="https://unavatar.io/tiktok/Lolirock.french.fan" onerror="fallbackAvatar()" style="width: 55px; height: 55px; border-radius: 50%; border: 2px solid #d8b4fe; object-fit: cover;">
+      <div style="text-align: left;">
+        <div id="displayHandle" style="font-weight: 700; font-size: 1.05rem;">@Lolirock.french.fan</div>
+        <div style="font-size: 0.8rem; color: #34d399;">● Compte Détecté</div>
+      </div>
+    </div>
+
+    <button class="btn-action" onclick="nextStep(2)">Valider mon compte</button>
+  </div>
+
+  <!-- ÉTAPE 2 : Audit Vidéos & Liens -->
+  <div class="step-card" id="step2">
+    <h2>Tes publications sous-performantes</h2>
+    <p class="subtitle">Indique les vues de tes 2 vidéos bloquées ou colle le lien direct de ta vidéo</p>
+
+    <div class="video-grid">
+      <div class="video-card">
+        <label style="font-size: 0.75rem; color: #a0a0ab;">Vidéo 1 (Vues)</label>
+        <input type="number" id="video1Views" class="input-box" value="310" style="margin-bottom:0; font-weight:bold; color:#f472b6;">
+      </div>
+      <div class="video-card">
+        <label style="font-size: 0.75rem; color: #a0a0ab;">Vidéo 2 (Vues)</label>
+        <input type="number" id="video2Views" class="input-box" value="361" style="margin-bottom:0; font-weight:bold; color:#f472b6;">
+      </div>
+    </div>
+
+    <input type="text" id="tiktokVideoUrl" class="input-box" placeholder="Coller le lien d'une vidéo TikTok (Optionnel)" oninput="handleVideoUrl()">
+    <div id="linkStatus" class="link-feedback">✓ Lien enregistré pour l'analyse IA</div>
+
+    <button class="btn-action" onclick="saveStep2AndNext()">Étape suivante</button>
+  </div>
+
+  <!-- ÉTAPE 3 : Personnalité & Style de Contenu -->
+  <div class="step-card" id="step3">
+    <h2>Quel est ton style d'expression ?</h2>
+    <p class="subtitle">Cela permet à l'IA d'adapter ses accroches (hooks) sans te forcer à surjouer</p>
+
+    <button class="btn-choice" onclick="selectStyle('introvert')">
+      🤫 <strong>Plutôt introverti(e)</strong> - Je préfère le contenu posé, voix-off ou texte à l'écran.
+    </button>
+    <button class="btn-choice" onclick="selectStyle('extravert')">
+      🗣️ <strong>Plutôt extraverti(e)</strong> - Je suis à l'aise face caméra et j'aime parler directement.
+    </button>
+    <button class="btn-choice" onclick="selectStyle('mixte')">
+      🎭 <strong>Un mix des deux</strong> - Ça dépend des sujets et du format.
+    </button>
+  </div>
+
+  <!-- ÉTAPE 4 : Objectif & Redirection -->
+  <div class="step-card" id="step4">
+    <h2>Feuille de route prête !</h2>
+    <p class="subtitle">Analyse terminée pour <span id="finalHandle" style="color:#d8b4fe; font-weight:bold;">@Lolirock.french.fan</span></p>
+
+    <div style="background: rgba(255,255,255,0.03); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); text-align: left; margin-bottom: 15px;">
+      <div style="font-size:0.8rem; color:#a0a0ab;">OBJECTIF CIBLE (J+90)</div>
+      <div style="font-size: 1.8rem; font-weight: 800; color: #34d399; margin: 5px 0;">10 000 abonnés</div>
+      <div style="font-size:0.85rem; color:#d8b4fe;">Programme d'optimisation IA débloqué</div>
+    </div>
+
+    <div class="disclaimer-box">
+      ⚠️ <strong>Avis important :</strong> L'atteinte des objectifs nécessite la régularité des publications et la mise en pratique des conseils. Aucun résultat n'est garanti de manière irréaliste.
+    </div>
+
+    <button class="btn-action" style="margin-top:20px;" onclick="goToEspaceClient()">Accéder à mon Espace Client</button>
+  </div>
+
+  <script>
+    let userPersonality = 'introvert';
+
+    function nextStep(step) {
+      document.querySelectorAll('.step-card').forEach(card => card.classList.remove('active'));
+      document.getElementById(`step${step}`).classList.add('active');
+      document.getElementById('progressBar').style.width = (step / 4) * 100 + '%';
+    }
+
+    // Récupération dynamique de la VRAIE photo TikTok
+    function updateProfile() {
+      const username = document.getElementById('tiktokUsername').value.trim() || '@utilisateur';
+      document.getElementById('displayHandle').innerText = username;
+      document.getElementById('finalHandle').innerText = username;
+      
+      const cleanHandle = username.replace('@', '');
+      
+      // Tentative de récupération de la vraie photo de profil TikTok via Unavatar
+      const imgElem = document.getElementById('userAvatar');
+      imgElem.src = `https://unavatar.io/tiktok/${cleanHandle}`;
+
+      // Sauvegarde du pseudo pour la suite
+      localStorage.setItem('beviral_username', username);
+    }
+
+    // Image de secours si la photo TikTok est introuvable
+    function fallbackAvatar() {
+      const username = document.getElementById('tiktokUsername').value.trim() || 'user';
+      const cleanHandle = username.replace('@', '');
+      document.getElementById('userAvatar').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${cleanHandle}`;
+    }
+
+    // Gestion active du lien vidéo TikTok
+    function handleVideoUrl() {
+      const url = document.getElementById('tiktokVideoUrl').value.trim();
+      const status = document.getElementById('linkStatus');
+      if (url.length > 5) {
+        status.style.display = 'block';
+        localStorage.setItem('beviral_tiktok_link', url);
+      } else {
+        status.style.display = 'none';
+        localStorage.removeItem('beviral_tiktok_link');
+      }
+    }
+
+    function saveStep2AndNext() {
+      const v1 = document.getElementById('video1Views').value;
+      const v2 = document.getElementById('video2Views').value;
+      localStorage.setItem('beviral_video1_views', v1);
+      localStorage.setItem('beviral_video2_views', v2);
+      nextStep(3);
+    }
+
+    function selectStyle(style) {
+      userPersonality = style;
+      localStorage.setItem('beviral_style', style);
+      nextStep(4);
+    }
+
+    function goToEspaceClient() {
+      localStorage.setItem('beviral_user_configured', 'true');
+      window.location.href = 'app.html';
+    }
+
+    // Initialisation
+    updateProfile();
+  </script>
+</body>
+</html>
